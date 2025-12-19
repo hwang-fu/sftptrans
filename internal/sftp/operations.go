@@ -1,8 +1,13 @@
 package sftp
 
 import (
+	"fmt"
+	"io"
+	"os"
 	"path/filepath"
 	"time"
+
+	"golang.org/x/tools/go/analysis/passes/defers"
 )
 
 type FileEntry struct {
@@ -89,4 +94,25 @@ func (c *Client) Stat(path string) (*FileEntry, error) {
 		ModTime:     info.ModTime(),
 		Permissions: info.Mode().String(),
 	}, nil
+}
+
+func (c *Client) Download(remotePath, localPath string) error {
+	remoteFile, err := c.sftpClient.Open(remotePath)
+	if err != nil {
+		return fmt.Errorf("failed to open remote file: %w", err)
+	}
+	defer remoteFile.Close()
+
+	localFile, err := os.Create(localPath)
+	if err != nil {
+		return fmt.Errorf("failed to create local file: %w", err)
+	}
+	defer localFile.Close()
+
+	_, err = io.Copy(localFile, remoteFile)
+	if err != nil {
+		return fmt.Errorf("failed to download file: %w", err)
+	}
+
+	return nil
 }
