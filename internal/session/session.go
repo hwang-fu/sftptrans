@@ -25,3 +25,13 @@ func Initialize(client *sftp.Client, downloadDir string) {
 		}
 	})
 }
+
+func Current() *Session {
+	return current
+}
+
+func (s *Session) Client() *sftp.Client {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.client
+}
