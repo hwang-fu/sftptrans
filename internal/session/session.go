@@ -39,3 +39,12 @@ func (s *Session) Client() *sftp.Client {
 func (s *Session) DownloadDir() string {
 	return s.downloadDir
 }
+
+func (s *Session) Close() error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.client != nil {
+		return s.client.Close()
+	}
+	return nil
+}
