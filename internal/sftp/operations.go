@@ -75,3 +75,18 @@ func (c *Client) deleteDir(path string) error {
 
 	return c.sftpClient.RemoveDirectory(path)
 }
+
+func (c *Client) Stat(path string) (*FileEntry, error) {
+	info, err := c.sftpClient.Stat(path)
+	if err != nil {
+		return nil, err
+	}
+	return &FileEntry{
+		Name:        info.Name(),
+		Path:        path,
+		Size:        info.Size(),
+		IsDir:       info.IsDir(),
+		ModTime:     info.ModTime(),
+		Permissions: info.Mode().String(),
+	}, nil
+}
