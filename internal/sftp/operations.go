@@ -42,3 +42,14 @@ func (c *Client) MkDir(path string) error {
 func (c *Client) Rename(oldPath, newPath string) error {
 	return c.sftpClient.Rename(oldPath, newPath)
 }
+
+func (c *Client) Delete(path string) error {
+	info, err := c.sftpClient.Stat(path)
+	if err != nil {
+		return err
+	}
+	if info.IsDir() {
+		return c.deleteDir(path)
+	}
+	return c.sftpClient.Remove(path)
+}
