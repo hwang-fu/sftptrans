@@ -35,3 +35,7 @@ func (s *Session) Client() *sftp.Client {
 	defer s.mu.RUnlock()
 	return s.client
 }
+
+func (s *Session) DownloadDir() string {
+	return s.downloadDir
+}
