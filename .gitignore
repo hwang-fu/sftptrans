@@ -1,0 +1,263 @@
+# =============================================================================
+# sftptrans .gitignore
+# =============================================================================
+
+# =============================================================================
+# Go
+# =============================================================================
+
+# Binaries
+sftptrans
+sftptrans.exe
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.html
+coverage.txt
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Vendor directory (uncomment if you don't commit vendor/)
+# vendor/
+
+# Go build cache
+.go-build/
+
+# Delve debugger
+__debug_bin
+__debug_bin*
+
+# =============================================================================
+# Angular / Node.js (web/ directory)
+# =============================================================================
+
+# Dependencies
+web/node_modules/
+node_modules/
+
+# Angular build output
+web/dist/
+web/.angular/
+
+# Angular cache
+.angular/
+
+# npm
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# npm package lock (uncomment if you prefer yarn.lock only)
+# web/package-lock.json
+
+# Yarn
+web/.yarn/
+web/.pnp.*
+
+# TypeScript
+web/*.tsbuildinfo
+*.tsbuildinfo
+
+# Angular CLI
+web/.sass-cache/
+web/connect.lock
+web/libpeerconnection.log
+
+# e2e testing
+web/e2e/*.js
+web/e2e/*.map
+
+# =============================================================================
+# Embedded static files (built Angular output copied here)
+# =============================================================================
+
+# Don't commit built frontend - it's generated during build
+internal/server/static/
+
+# =============================================================================
+# IDEs and Editors
+# =============================================================================
+
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# GoLand / IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Vim
+*.swp
+*.swo
+*.swn
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Atom
+.atom/
+
+# =============================================================================
+# Operating Systems
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# =============================================================================
+# Environment and Secrets
+# =============================================================================
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env*.local
+*.env
+
+# Private keys (never commit these!)
+*.pem
+*.key
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+*.ppk
+
+# =============================================================================
+# Logs and Databases
+# =============================================================================
+
+# Logs
+*.log
+logs/
+log/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# =============================================================================
+# Temporary and Cache Files
+# =============================================================================
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Cache
+.cache/
+*.cache
+
+# =============================================================================
+# Build and Distribution
+# =============================================================================
+
+# Build directories
+build/
+dist/
+out/
+bin/
+
+# Archives
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.rar
+*.7z
+
+# =============================================================================
+# Container / Docker
+# =============================================================================
+
+# Ignore local container data
+.container-data/
+.docker/
+
+# =============================================================================
+# Testing
+# =============================================================================
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# =============================================================================
+# Miscellaneous
+# =============================================================================
+
+# Local configuration overrides
+*.local
+config.local.*
+
+# Profiling
+*.prof
+*.pprof
+cpu.out
+mem.out
+
+# Core dumps
+core
+core.*
