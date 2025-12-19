@@ -53,3 +53,25 @@ func (c *Client) Delete(path string) error {
 	}
 	return c.sftpClient.Remove(path)
 }
+
+func (c *Client) deleteDir(path string) error {
+	files, err := c.sftpClient.ReadDir(path)
+	if err != nil {
+		return err
+	}
+
+	for _, f := range files {
+		fullPath := filepath.Join(path, f.Name())
+		if f.IsDir() {
+			if err := c.deleteDir(fullPath); err != nil {
+				return err
+			}
+		} else {
+			if err := c.sftpClient.Remove(fullPath); err != nil {
+				return err
+			}
+		}
+	}
+
+	return c.sftpClient.RemoveDirectory(path)
+}
