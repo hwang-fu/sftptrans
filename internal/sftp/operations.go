@@ -34,3 +34,7 @@ func (c *Client) ListDir(path string) ([]FileEntry, error) {
 
 	return entries, nil
 }
+
+func (c *Client) MkDir(path string) error {
+	return c.sftpClient.MkdirAll(path)
+}
