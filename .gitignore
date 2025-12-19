@@ -7,8 +7,8 @@
 # =============================================================================
 
 # Binaries
-/sftptrans
-sftptrans.exe
+./sftptrans
+./sftptrans.exe
 *.exe
 *.exe~
 *.dll
