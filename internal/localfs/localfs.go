@@ -39,3 +39,11 @@ func ListDir(path string) ([]FileEntry, error) {
 
 	return files, nil
 }
+
+func GetHomeDir() string {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return "/"
+	}
+	return homeDir
+}
