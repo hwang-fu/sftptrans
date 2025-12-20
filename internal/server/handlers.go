@@ -1,5 +1,10 @@
 package server
 
+import (
+	"encoding/json"
+	"net/http"
+)
+
 type APIResponse struct {
 	Success bool      `json:"success"`
 	Data    any       `json:"data,omitempty"`
@@ -9,4 +14,10 @@ type APIResponse struct {
 type APIError struct {
 	Message string `json:"message"`
 	Code    string `json:"code"`
+}
+
+func writeJSON(writer http.ResponseWriter, status int, response APIResponse) {
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(status)
+	json.NewEncoder(writer).Encode(response)
 }
