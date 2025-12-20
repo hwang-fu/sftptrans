@@ -25,3 +25,10 @@ export interface ApiResponse<T> {
     code: string;
   };
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  constructor(private http: HttpClient) {}
+}
