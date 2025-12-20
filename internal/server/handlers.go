@@ -66,3 +66,21 @@ func handleRemoteMkdir(w http.ResponseWriter, r *http.Request) {
 	}
 	writeSuccess(w, nil)
 }
+
+func handleRemoteRename(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		OldPath string `json:"oldPath"`
+		NewPath string `json:"newPath"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "Invalid request body", "INVALID_REQUEST")
+		return
+	}
+
+	sess := session.Current()
+	if err := sess.Client().Rename(req.OldPath, req.NewPath); err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error(), "SFTP_RENAME_ERROR")
+		return
+	}
+	writeSuccess(w, nil)
+}
