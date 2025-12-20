@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"sftptrans/internal/localfs"
 	"sftptrans/internal/session"
 )
 
@@ -166,4 +167,29 @@ func handleRemoteUpload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeSuccess(w, map[string]string{"remotePath": fullRemotePath})
+}
+
+func handleLocalList(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Query().Get("path")
+	if path == "" {
+		path = localfs.GetHomeDir()
+	}
+
+	entries, err := localfs.ListDir(path)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error(), "LOCAL_LIST_ERROR")
+		return
+	}
+	writeSuccess(w, entries)
+}
+
+// Status and control
+
+func handleStatus(w http.ResponseWriter, r *http.Request) {
+	sess := session.Current()
+	writeSuccess(w, map[string]interface{}{
+		"connected":   true,
+		"connection":  sess.Client().ConnectionInfo(),
+		"downloadDir": sess.DownloadDir(),
+	})
 }
