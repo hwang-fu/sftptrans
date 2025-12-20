@@ -13,5 +13,4 @@ build: backend
 clean:
 	rm -rf sftptrans internal/server/static
 
-run: build
-	./sftptrans -host localhost -user testuser -password testpass
+# ./sftptrans -h <host> -u <username> -pass <password>
