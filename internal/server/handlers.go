@@ -21,3 +21,10 @@ func writeJSON(writer http.ResponseWriter, status int, response APIResponse) {
 	writer.WriteHeader(status)
 	json.NewEncoder(writer).Encode(response)
 }
+
+func writeError(writer http.ResponseWriter, status int, message string, code string) {
+	writeJSON(writer, status, APIResponse{
+		Success: false,
+		Error:   &APIError{Message: message, Code: code},
+	})
+}
