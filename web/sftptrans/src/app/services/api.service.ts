@@ -68,4 +68,8 @@ export class ApiService {
       formData
     );
   }
+
+  shutdown(): Observable<ApiResponse<{ message: string }>> {
+    return this.http.post<ApiResponse<{ message: string }>>('/api/shutdown', {});
+  }
 }
