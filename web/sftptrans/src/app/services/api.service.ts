@@ -52,4 +52,8 @@ export class ApiService {
     return this.http.post<ApiResponse<null>>('/api/remote/rename', { oldPath, newPath });
   }
 
+  delete(path: string): Observable<ApiResponse<null>> {
+    return this.http.delete<ApiResponse<null>>(`/api/remote/delete?path=${encodeURIComponent(path)}`);
+  }
+
 }
