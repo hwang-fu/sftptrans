@@ -56,4 +56,7 @@ export class ApiService {
     return this.http.delete<ApiResponse<null>>(`/api/remote/delete?path=${encodeURIComponent(path)}`);
   }
 
+  download(path: string): Observable<ApiResponse<{ localPath: string }>> {
+    return this.http.get<ApiResponse<{ localPath: string }>>(`/api/remote/download?path=${encodeURIComponent(path)}`);
+  }
 }
