@@ -84,3 +84,18 @@ func handleRemoteRename(w http.ResponseWriter, r *http.Request) {
 	}
 	writeSuccess(w, nil)
 }
+
+func handleRemoteDelete(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Query().Get("path")
+	if path == "" {
+		writeError(w, http.StatusBadRequest, "Path is required", "INVALID_REQUEST")
+		return
+	}
+
+	sess := session.Current()
+	if err := sess.Client().Delete(path); err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error(), "SFTP_DELETE_ERROR")
+		return
+	}
+	writeSuccess(w, nil)
+}
