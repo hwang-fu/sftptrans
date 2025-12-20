@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"net/http"
+	"path/filepath"
 
 	"sftptrans/internal/session"
 )
@@ -98,4 +99,23 @@ func handleRemoteDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeSuccess(w, nil)
+}
+
+func handleRemoteDownload(w http.ResponseWriter, r *http.Request) {
+	remotePath := r.URL.Query().Get("path")
+	if remotePath == "" {
+		writeError(w, http.StatusBadRequest, "Path is required", "INVALID_REQUEST")
+		return
+	}
+
+	sess := session.Current()
+	filename := filepath.Base(remotePath)
+	localPath := filepath.Join(sess.DownloadDir(), filename)
+
+	if err := sess.Client().Download(remotePath, localPath); err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error(), "SFTP_DOWNLOAD_ERROR")
+		return
+	}
+
+	writeSuccess(w, map[string]string{"localPath": localPath})
 }
