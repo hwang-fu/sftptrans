@@ -39,4 +39,8 @@ export class ApiService {
   listRemote(path: string): Observable<ApiResponse<FileEntry[]>> {
     return this.http.get<ApiResponse<FileEntry[]>>(`/api/remote/list?path=${encodeURIComponent(path)}`);
   }
+
+  listLocal(path: string): Observable<ApiResponse<FileEntry[]>> {
+    return this.http.get<ApiResponse<FileEntry[]>>(`/api/local/list?path=${encodeURIComponent(path)}`);
+  }
 }
