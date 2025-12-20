@@ -1,3 +1,6 @@
+// Package server provides HTTP handlers for the SFTP transfer application.
+// It exposes REST API endpoints for remote (SFTP) and local filesystem operations,
+// including listing, uploading, downloading, and file management.
 package server
 
 import (
@@ -10,6 +13,7 @@ import (
 	"sftptrans/internal/session"
 )
 
+// APIResponse provides a consistent JSON structure for all API responses.
 type APIResponse struct {
 	Success bool      `json:"success"`
 	Data    any       `json:"data,omitempty"`
@@ -122,6 +126,7 @@ func handleRemoteDownload(w http.ResponseWriter, r *http.Request) {
 	writeSuccess(w, map[string]string{"localPath": localPath})
 }
 
+// handleRemoteUpload handles HTTP requests to upload a file from the user's browser to the remote SFTP server.
 func handleRemoteUpload(w http.ResponseWriter, r *http.Request) {
 	remotePath := r.URL.Query().Get("path")
 	if remotePath == "" {
@@ -129,12 +134,15 @@ func handleRemoteUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse multipart form (max 1GB)
+	// Parse the multipart form data (max 1GB)
+	// The argument (1 << 30) is the maximum memory to use for parsing:
+	// 1 << 30 = 1 * 2^30 = 1,073,741,824 bytes = 1 GB
 	if err := r.ParseMultipartForm(1 << 30); err != nil {
 		writeError(w, http.StatusBadRequest, "Failed to parse form", "INVALID_REQUEST")
 		return
 	}
 
+	// Extract the uploaded file from the form
 	file, header, err := r.FormFile("file")
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "No file provided", "INVALID_REQUEST")
@@ -194,6 +202,7 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// shutdownChan allows graceful shutdown to be triggered from an HTTP request.
 var shutdownChan chan struct{}
 
 func SetShutdownChan(ch chan struct{}) {
@@ -203,6 +212,6 @@ func SetShutdownChan(ch chan struct{}) {
 func handleShutdown(w http.ResponseWriter, r *http.Request) {
 	writeSuccess(w, map[string]string{"message": "Shutting down..."})
 	if shutdownChan != nil {
-		close(shutdownChan)
+		close(shutdownChan) // Closing signals all listeners that shutdown was requested
 	}
 }
