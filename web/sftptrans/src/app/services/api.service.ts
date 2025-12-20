@@ -35,4 +35,8 @@ export class ApiService {
   getStatus(): Observable<ApiResponse<StatusResponse>> {
     return this.http.get<ApiResponse<StatusResponse>>('/api/status');
   }
+
+  listRemote(path: string): Observable<ApiResponse<FileEntry[]>> {
+    return this.http.get<ApiResponse<FileEntry[]>>(`/api/remote/list?path=${encodeURIComponent(path)}`);
+  }
 }
