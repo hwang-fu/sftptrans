@@ -47,4 +47,9 @@ export class ApiService {
   mkdir(path: string): Observable<ApiResponse<null>> {
     return this.http.post<ApiResponse<null>>('/api/remote/mkdir', { path });
   }
+
+  rename(oldPath: string, newPath: string): Observable<ApiResponse<null>> {
+    return this.http.post<ApiResponse<null>>('/api/remote/rename', { oldPath, newPath });
+  }
+
 }
