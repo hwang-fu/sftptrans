@@ -64,6 +64,7 @@ func main() {
 		}
 	}()
 
+	// Wait for shutdown signal
 	select {
 	case <-sigChan:
 		slog.Info("Received shutdown signal")
@@ -71,6 +72,7 @@ func main() {
 		slog.Info("Shutdown requested via API")
 	}
 
+	// Graceful shutdown
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
