@@ -28,3 +28,7 @@ func writeError(writer http.ResponseWriter, status int, message string, code str
 		Error:   &APIError{Message: message, Code: code},
 	})
 }
+
+func writeSuccess(writer http.ResponseWriter, data any) {
+	writeJSON(writer, http.StatusOK, APIResponse{Success: true, Data: data})
+}
