@@ -193,3 +193,16 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 		"downloadDir": sess.DownloadDir(),
 	})
 }
+
+var shutdownChan chan struct{}
+
+func SetShutdownChan(ch chan struct{}) {
+	shutdownChan = ch
+}
+
+func handleShutdown(w http.ResponseWriter, r *http.Request) {
+	writeSuccess(w, map[string]string{"message": "Shutting down..."})
+	if shutdownChan != nil {
+		close(shutdownChan)
+	}
+}
