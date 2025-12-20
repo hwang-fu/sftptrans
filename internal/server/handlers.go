@@ -187,7 +187,7 @@ func handleLocalList(w http.ResponseWriter, r *http.Request) {
 
 func handleStatus(w http.ResponseWriter, r *http.Request) {
 	sess := session.Current()
-	writeSuccess(w, map[string]interface{}{
+	writeSuccess(w, map[string]any{
 		"connected":   true,
 		"connection":  sess.Client().ConnectionInfo(),
 		"downloadDir": sess.DownloadDir(),
