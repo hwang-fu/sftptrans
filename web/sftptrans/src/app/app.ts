@@ -133,7 +133,7 @@ import { ApiService, FileEntry, StatusResponse } from './services/api.service';
     }
   `]
 })
-export class AppComponent implements OnInit {
+export class App implements OnInit {
   status: StatusResponse | null = null;
   statusMessage = 'Ready';
 
