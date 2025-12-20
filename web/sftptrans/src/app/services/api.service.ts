@@ -59,4 +59,13 @@ export class ApiService {
   download(path: string): Observable<ApiResponse<{ localPath: string }>> {
     return this.http.get<ApiResponse<{ localPath: string }>>(`/api/remote/download?path=${encodeURIComponent(path)}`);
   }
+
+  upload(localPath: string, remotePath: string): Observable<ApiResponse<{ remotePath: string }>> {
+    const formData = new FormData();
+    // Note: For browser-based upload, we'd use file input. This is simplified.
+    return this.http.post<ApiResponse<{ remotePath: string }>>(
+      `/api/remote/upload?path=${encodeURIComponent(remotePath)}`,
+      formData
+    );
+  }
 }
