@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+//go:embed static/*
 var staticFiles embed.FS
 
 func NewServer(listenAddr string) *http.Server {
