@@ -31,4 +31,8 @@ export interface ApiResponse<T> {
 })
 export class ApiService {
   constructor(private http: HttpClient) {}
+
+  getStatus(): Observable<ApiResponse<StatusResponse>> {
+    return this.http.get<ApiResponse<StatusResponse>>('/api/status');
+  }
 }
