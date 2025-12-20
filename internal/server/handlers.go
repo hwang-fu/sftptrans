@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"sftptrans/internal/session"
@@ -118,4 +119,51 @@ func handleRemoteDownload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeSuccess(w, map[string]string{"localPath": localPath})
+}
+
+func handleRemoteUpload(w http.ResponseWriter, r *http.Request) {
+	remotePath := r.URL.Query().Get("path")
+	if remotePath == "" {
+		writeError(w, http.StatusBadRequest, "Remote path is required", "INVALID_REQUEST")
+		return
+	}
+
+	// Parse multipart form (max 1GB)
+	if err := r.ParseMultipartForm(1 << 30); err != nil {
+		writeError(w, http.StatusBadRequest, "Failed to parse form", "INVALID_REQUEST")
+		return
+	}
+
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "No file provided", "INVALID_REQUEST")
+		return
+	}
+	defer file.Close()
+
+	// Save to temp file first
+	tmpFile, err := os.CreateTemp("", "sftptrans-upload-*")
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error(), "LOCAL_ERROR")
+		return
+	}
+	tmpPath := tmpFile.Name()
+	defer os.Remove(tmpPath)
+
+	if _, err := tmpFile.ReadFrom(file); err != nil {
+		tmpFile.Close()
+		writeError(w, http.StatusInternalServerError, err.Error(), "LOCAL_ERROR")
+		return
+	}
+	tmpFile.Close()
+
+	// Upload to remote
+	fullRemotePath := filepath.Join(remotePath, header.Filename)
+	sess := session.Current()
+	if err := sess.Client().Upload(tmpPath, fullRemotePath); err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error(), "SFTP_UPLOAD_ERROR")
+		return
+	}
+
+	writeSuccess(w, map[string]string{"remotePath": fullRemotePath})
 }
