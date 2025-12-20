@@ -13,7 +13,15 @@ func NewServer(listenAddr string) *http.Server {
 	mux := http.NewServeMux()
 
 	// API routes
-	mux.HandleFunc("", handleRemoteList)
+	mux.HandleFunc("GET /api/remote/list", handleRemoteList)
+	mux.HandleFunc("POST /api/remote/mkdir", handleRemoteMkdir)
+	mux.HandleFunc("POST /api/remote/rename", handleRemoteRename)
+	mux.HandleFunc("DELETE /api/remote/delete", handleRemoteDelete)
+	mux.HandleFunc("GET /api/remote/download", handleRemoteDownload)
+	mux.HandleFunc("POST /api/remote/upload", handleRemoteUpload)
+	mux.HandleFunc("GET /api/local/list", handleLocalList)
+	mux.HandleFunc("GET /api/status", handleStatus)
+	mux.HandleFunc("POST /api/shutdown", handleShutdown)
 
 	// Static files (Angular SPA)
 	staticFS, err := fs.Sub(staticFiles, "static")
@@ -22,7 +30,10 @@ func NewServer(listenAddr string) *http.Server {
 	}
 	mux.Handle("/", spaHandler{staticFS: http.FileServer(http.FS(staticFS))})
 
-	return &http.Server{}
+	return &http.Server{
+		Addr:    listenAddr,
+		Handler: mux,
+	}
 }
 
 // spaHandler serves static files and falls back to index.html for SPA routing
