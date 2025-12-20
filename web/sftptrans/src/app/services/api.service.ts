@@ -11,3 +11,9 @@ export interface FileEntry {
   permissions: string;
 }
 
+export interface StatusResponse {
+  connected: boolean;
+  connection: string;
+  downloadDir: string;
+}
+
