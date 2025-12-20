@@ -49,3 +49,20 @@ func handleRemoteList(w http.ResponseWriter, req *http.Request) {
 	}
 	writeSuccess(w, entries)
 }
+
+func handleRemoteMkdir(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Path string `json:"path"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "Invalid request body", "INVALID_REQUEST")
+		return
+	}
+
+	sess := session.Current()
+	if err := sess.Client().MkDir(req.Path); err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error(), "SFTP_MKDIR_ERROR")
+		return
+	}
+	writeSuccess(w, nil)
+}
